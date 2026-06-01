@@ -46,13 +46,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gl);box-
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
 textarea.words{background:linear-gradient(135deg,#f0faf4,#e8f5ee);border-color:var(--gl);color:var(--g);font-weight:600;font-size:.82rem;resize:none;min-height:44px}
 
-/* ── BANK TABS ── */
-.banks{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem;margin-bottom:.9rem}
-.bk{padding:9px 5px;border:2px solid var(--grayL);border-radius:8px;background:#fafafa;cursor:pointer;text-align:center;font-family:'Cairo',sans-serif;font-size:.72rem;font-weight:700;color:var(--gray);transition:.2s;line-height:1.3}
-.bk:hover{border-color:var(--gl);background:var(--gp)}
-.bk.active{border-color:var(--g);background:var(--gp);color:var(--g)}
-.bk .bi{font-size:1.3rem;display:block;margin-bottom:2px}
-
 /* ── UPLOAD ZONE ── */
 .upload-zone{border:2.5px dashed var(--grayL);border-radius:10px;padding:1.2rem;text-align:center;cursor:pointer;transition:.2s;background:#fafafa;position:relative;overflow:hidden}
 .upload-zone:hover{border-color:var(--gl);background:var(--gp)}
@@ -61,7 +54,6 @@ textarea.words{background:linear-gradient(135deg,#f0faf4,#e8f5ee);border-color:v
 .upload-icon{font-size:2rem;margin-bottom:.3rem;display:block}
 .upload-text{font-size:.82rem;color:var(--gray);font-weight:600}
 .upload-hint{font-size:.72rem;color:#aaa;margin-top:.2rem}
-.img-preview{max-width:100%;max-height:80px;border-radius:6px;margin-top:.5rem;display:none}
 
 /* ── TOGGLE ── */
 .trow{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
@@ -74,4 +66,301 @@ textarea.words{background:linear-gradient(135deg,#f0faf4,#e8f5ee);border-color:v
 .tog input:checked+.ts::before{transform:translateX(19px)}
 
 /* ── BTNS ── */
-.btn-print{width:100%;padding:13px;background:linear-gradient(135deg,var(--g),var(--gl));color:#fff;border:none
+.btn-print{width:100%;padding:13px;background:linear-gradient(135deg,var(--g),var(--gl));color:#fff;border:none;border-radius:10px;font-family:'Cairo',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 4px 16px rgba(26,107,58,.35);margin-top:.8rem}
+.btn-print:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,107,58,.45)}
+.btn-reset{width:100%;padding:8px;background:transparent;border:1.5px solid var(--grayL);border-radius:8px;font-family:'Cairo',sans-serif;font-size:.8rem;color:var(--gray);cursor:pointer;transition:.2s;margin-top:.5rem}
+.btn-reset:hover{border-color:#e53e3e;color:#e53e3e;background:#fff5f5}
+.btn-save{padding:7px 14px;background:rgba(26,107,58,.1);border:1.5px solid rgba(26,107,58,.3);border-radius:7px;font-family:'Cairo',sans-serif;font-size:.78rem;font-weight:700;color:var(--g);cursor:pointer;transition:.2s}
+.btn-save:hover{background:var(--gp)}
+
+/* ── RIGHT PANEL ── */
+.right-panel{position:sticky;top:80px}
+
+/* ── CANVAS WRAPPER ── */
+.canvas-wrap{position:relative;background:#f5f5f5;border-radius:10px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.2);border:1.5px solid #ddd;cursor:crosshair;user-select:none}
+.canvas-wrap canvas{display:block;width:100%;height:auto}
+
+/* ── COORDS TABLE ── */
+.ctbl{width:100%;border-collapse:collapse;font-size:.78rem}
+.ctbl th{background:var(--g);color:#fff;padding:7px 10px;text-align:right;font-weight:600}
+.ctbl td{padding:5px 8px;border-bottom:1px solid var(--grayL);vertical-align:middle}
+.ctbl td input{padding:4px 7px;font-size:.76rem}
+.ctbl tr:nth-child(even) td{background:#f9fffe}
+.toggle-panel{width:100%;padding:9px 13px;background:var(--gp);border:2px solid var(--gp);border-radius:8px;font-family:'Cairo',sans-serif;font-size:.82rem;font-weight:700;color:var(--g);cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:.2s;margin-top:.8rem}
+.toggle-panel:hover{background:#d4eddc}
+.panel-body{display:none;border:1.5px solid var(--gp);border-radius:8px;margin-top:.6rem;overflow:hidden}
+.panel-body.open{display:block}
+
+/* ── SETUP WIZARD ── */
+.wizard{background:linear-gradient(135deg,#fffbf0,#fff8e1);border:2px solid rgba(184,134,46,.35);border-radius:10px;padding:1rem;margin-bottom:1rem}
+.wiz-title{font-size:.85rem;font-weight:700;color:var(--gold);margin-bottom:.5rem;display:flex;align-items:center;gap:6px}
+.wiz-steps{font-size:.76rem;color:#666;line-height:2}
+.wiz-steps span{display:inline-block;background:var(--gold);color:#fff;border-radius:50%;width:18px;height:18px;text-align:center;line-height:18px;font-size:.65rem;font-weight:700;margin-left:4px}
+
+/* ── FONT CONTROLS ── */
+.font-row{display:grid;grid-template-columns:1fr 80px;gap:.5rem;margin-bottom:.6rem;align-items:end}
+
+/* ── PROFILES ── */
+.profiles{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem}
+.prof-btn{padding:5px 12px;border:1.5px solid var(--grayL);border-radius:16px;font-family:'Cairo',sans-serif;font-size:.73rem;font-weight:600;color:var(--gray);cursor:pointer;background:#fafafa;transition:.2s}
+.prof-btn:hover{border-color:var(--gl);color:var(--g);background:var(--gp)}
+.prof-btn.active{border-color:var(--g);color:var(--g);background:var(--gp)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:#1a3328;color:#fff;padding:11px 22px;border-radius:28px;font-size:.88rem;font-family:'Cairo',sans-serif;box-shadow:0 4px 20px rgba(0,0,0,.3);z-index:9999;opacity:0;transition:.3s;pointer-events:none;border:1px solid rgba(95,207,138,.25)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── WARNING BOX ── */
+.warn{background:#fffbeb;border:1px solid #f6d860;border-radius:8px;padding:.7rem .9rem;font-size:.76rem;color:#7d5a00;line-height:1.7;margin-top:.8rem}
+
+/* ── NO IMAGE STATE ── */
+.no-img-msg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#aaa;font-size:.85rem;gap:.5rem;pointer-events:none}
+.no-img-msg .big{font-size:3rem}
+
+/* ── size indicator ── */
+.size-badge{font-size:.7rem;color:#888;text-align:center;margin-top:.35rem}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <div class="logo">
+      <div class="logo-ico">🏦</div>
+      <div>
+        <h1>طباعة الشيكات</h1>
+        <p>نظام احترافي للشيكات المصرية</p>
+      </div>
+    </div>
+    <div class="hbadges">
+      <span class="hb hb-g">🔒 100% آمن</span>
+      <span class="hb hb-y">✨ مجاني</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="form-col">
+
+  <div class="wizard">
+    <div class="wiz-title">📐 كيف تستخدم النظام؟</div>
+    <div class="wiz-steps">
+      <span>١</span> اختر البنك من القائمة (ستظهر صورته تلقائياً)<br>
+      <span>٢</span> أدخل بيانات الشيك (المستفيد، المبلغ، التاريخ)<br>
+      <span>٣</span> <b>اسحب الحقول</b> بالماوس على صورة الشيك حتى تتطابق<br>
+      <span>٤</span> احفظ الإعدادات — تُستخدم تلقائياً المرة القادمة<br>
+      <span>٥</span> اطبع! الطباعة تكون بدون الصورة (نص فقط)
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct"><span class="ico">🖼</span> صورة الشيك (للمعايرة فقط)</div>
+
+    <label style="margin-top:.3rem">اختر البنك للضبط السريع:</label>
+    <div class="profiles" id="profilesRow">
+      <button class="prof-btn" onclick="loadProfile('nbe', this)">🟢 الأهلي</button>
+      <button class="prof-btn" onclick="loadProfile('bm', this)">🔴 بنك مصر</button>
+      <button class="prof-btn" onclick="loadProfile('cib', this)">🔵 CIB</button>
+      <button class="prof-btn" onclick="loadProfile('qnb', this)">🟣 QNB</button>
+      <button class="prof-btn" onclick="loadProfile('alex', this)">🟠 الإسكندرية</button>
+      <button class="prof-btn" onclick="loadProfile('faisal', this)">🟢 بنك فيصل</button>
+    </div>
+    
+    <div class="upload-zone" id="uploadZone" style="margin-top: 1rem;">
+      <input type="file" id="imgInput" accept="image/*" onchange="loadImage(event)"/>
+      <span class="upload-icon">📷</span>
+      <div class="upload-text">أو اضغط لرفع صورة شيك يدوياً</div>
+      <div class="upload-hint">JPG / PNG — الصورة لا تُحفظ ولا تُرسل</div>
+    </div>
+
+    <div class="fr" style="margin-top:.7rem">
+      <div class="fg">
+        <label>عرض الشيك الفعلي (مم)</label>
+        <input type="number" id="cwMM" value="203" min="100" max="350" oninput="onSizeChange()"/>
+      </div>
+      <div class="fg">
+        <label>ارتفاع الشيك الفعلي (مم)</label>
+        <input type="number" id="chMM" value="93" min="50" max="200" oninput="onSizeChange()"/>
+      </div>
+    </div>
+
+    <button class="btn-save" onclick="saveCurrentProfile()">💾 حفظ الإعدادات الحالية</button>
+  </div>
+
+  <div class="card">
+    <div class="ct"><span class="ico">📝</span> بيانات الشيك</div>
+
+    <div class="fg">
+      <label>المستفيد *</label>
+      <input type="text" id="payee" placeholder="اسم الشخص أو الشركة..." oninput="redraw()"/>
+    </div>
+
+    <div class="fr">
+      <div class="fg">
+        <label>المبلغ (أرقام) — جنيه مصري *</label>
+        <input type="number" id="amount" placeholder="0.00" step="0.01" min="0" oninput="calcWords();redraw()"/>
+      </div>
+      <div class="fg">
+        <label>التاريخ *</label>
+        <input type="date" id="chequeDate" oninput="redraw()"/>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label>المبلغ كتابةً (يُحسب تلقائياً)</label>
+      <textarea class="words" id="amountWords" rows="2" readonly placeholder="سيُولَّد تلقائياً عند إدخال المبلغ..."></textarea>
+    </div>
+
+    <div class="fg">
+      <label>ملاحظات / مذكرة (اختياري)</label>
+      <input type="text" id="memo" placeholder="مثال: إيجار ديسمبر، رقم الفاتورة..." oninput="redraw()"/>
+    </div>
+
+    <div class="trow">
+      <span class="tlbl">ختم "للمستفيد الأول فقط / حساب المستفيد"</span>
+      <label class="tog"><input type="checkbox" id="acPayee" onchange="redraw()"/><span class="ts"></span></label>
+    </div>
+
+    <div class="ct" style="margin-top:.5rem"><span class="ico">🔤</span> الخط</div>
+    <div class="font-row">
+      <div class="fg" style="margin:0">
+        <label>نوع الخط</label>
+        <select id="fontFace" onchange="redraw()">
+          <option value="'Cairo', Arial">Cairo (الافتراضي)</option>
+          <option value="'Amiri', serif">Amiri (أميري)</option>
+          <option value="Arial">Arial</option>
+          <option value="'Times New Roman'">Times New Roman</option>
+          <option value="Tahoma">Tahoma</option>
+        </select>
+      </div>
+      <div class="fg" style="margin:0">
+        <label>الحجم (pt)</label>
+        <input type="number" id="fontSize" value="11" min="7" max="18" oninput="redraw()"/>
+      </div>
+    </div>
+
+    <button class="btn-print" onclick="doPrint()">🖨️ طباعة الشيك</button>
+    <button class="btn-reset" onclick="resetForm()">🔄 تفريغ البيانات</button>
+  </div>
+
+  <div class="card">
+    <button class="toggle-panel" onclick="togglePanel('coordsPanel',this)">
+      📍 مواضع الحقول بالملليمتر <span id="arrCoords">▼</span>
+    </button>
+    <div class="panel-body" id="coordsPanel">
+      <table class="ctbl">
+        <thead><tr><th>الحقل</th><th>من اليسار (مم)</th><th>من الأسفل (مم)</th><th>عرض (مم)</th></tr></thead>
+        <tbody id="coordsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<div class="right-panel">
+  <div class="card">
+    <div class="ct"><span class="ico">👁</span> معاينة مباشرة — اسحب الحقول بالماوس
+      <span style="margin-right:auto;font-size:.7rem;font-weight:400;color:#aaa">الصورة للمعايرة فقط — لن تُطبع</span>
+    </div>
+
+    <div class="canvas-wrap" id="canvasWrap">
+      <canvas id="mainCanvas"></canvas>
+      <div class="no-img-msg" id="noImgMsg">
+        <span class="big">🖼</span>
+        <span>اختر بنك أو حمّل صورة شيكك لتظهر هنا</span>
+      </div>
+    </div>
+    <div class="size-badge" id="sizeBadge">عرض: 203 مم × ارتفاع: 93 مم</div>
+
+    <div class="warn">
+      <strong>⚠️ هام للطباعة:</strong>
+      استخدم <b>Google Chrome</b> فقط · Scale = <b>100%</b> · لا تختر "Fit to page"
+    </div>
+  </div>
+</div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+const canvas = document.getElementById('mainCanvas');
+const ctx = canvas.getContext('2d');
+let bgImg = null;
+let canvasW = 800, canvasH = 367; 
+let cwMM = 203, chMM = 93; 
+
+const FIELDS = {
+  payee:  {label:'المستفيد',    xMM:40, yMM:64, wMM:120, color:'#111'},
+  words:  {label:'المبلغ كتابة',xMM:38, yMM:50, wMM:120, color:'#0d5e31'},
+  digits: {label:'المبلغ أرقام',xMM:155,yMM:50, wMM:35,  color:'#111'},
+  date:   {label:'التاريخ',     xMM:148,yMM:64, wMM:45,  color:'#111'},
+  memo:   {label:'ملاحظات',     xMM:10, yMM:16, wMM:80,  color:'#555'},
+};
+
+let dragging = null, dragOffX = 0, dragOffY = 0;
+
+const PRESETS = {
+  nbe:    {cw:203,ch:93, img:'imgs/nbe.jpg', payee:{x:38,y:63},words:{x:36,y:50},digits:{x:158,y:52},date:{x:152,y:64},memo:{x:10,y:14}},
+  bm:     {cw:203,ch:93, img:'imgs/bm.jpg', payee:{x:40,y:61},words:{x:38,y:48},digits:{x:156,y:50},date:{x:10,y:64},memo:{x:10,y:14}},
+  cib:    {cw:203,ch:93, img:'imgs/cib.jpg', payee:{x:38,y:64},words:{x:36,y:51},digits:{x:160,y:53},date:{x:155,y:65},memo:{x:12,y:14}},
+  qnb:    {cw:203,ch:93, img:'imgs/qnb.jpg', payee:{x:40,y:62},words:{x:38,y:49},digits:{x:157,y:51},date:{x:150,y:63},memo:{x:10,y:14}},
+  alex:   {cw:203,ch:93, img:'imgs/alex.jpg', payee:{x:36,y:65},words:{x:34,y:52},digits:{x:156,y:54},date:{x:10,y:66},memo:{x:10,y:14}},
+  faisal: {cw:203,ch:93, img:'imgs/faisal.jpg', payee:{x:40,y:62},words:{x:38,y:50},digits:{x:155,y:52},date:{x:150,y:64},memo:{x:10,y:14}},
+};
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+document.getElementById('chequeDate').valueAsDate = new Date();
+
+function init(){
+  updateCanvasSize();
+  buildCoordsTable();
+  redraw();
+  setupDrag();
+}
+
+function updateCanvasSize(){
+  cwMM = parseFloat(document.getElementById('cwMM').value)||203;
+  chMM = parseFloat(document.getElementById('chMM').value)||93;
+  document.getElementById('sizeBadge').textContent = `عرض: ${cwMM} مم × ارتفاع: ${chMM} مم`;
+}
+
+function onSizeChange(){
+  updateCanvasSize();
+  redraw();
+  buildCoordsTable();
+}
+
+function loadImage(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      bgImg = img;
+      const ratio = img.naturalWidth / img.naturalHeight;
+      canvasW = 800;
+      canvasH = Math.round(800 / ratio);
+      canvas.width = canvasW;
+      canvas.height = canvasH;
+      document.getElementById('noImgMsg').style.display = 'none';
+      redraw();
+      showToast('✅ تم تحميل صورة الشيك');
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+  document.getElementById('uploadZone').classList.add('has-img');
+}
+
+function buildCoordsTable(){
+  const tbody = document.getElementById('coordsBody');
+  tbody.innerHTML = '';
+  Object.entries(FIELDS).forEach(([key, f]) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${f
