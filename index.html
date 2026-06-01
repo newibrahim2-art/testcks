@@ -202,6 +202,7 @@ textarea.words{background:linear-gradient(135deg,#f0faf4,#e8f5ee);border-color:v
       <button class="prof-btn" onclick="loadProfile('cib')">🔵 CIB</button>
       <button class="prof-btn" onclick="loadProfile('qnb')">🟣 QNB</button>
       <button class="prof-btn" onclick="loadProfile('alex')">🟠 الإسكندرية</button>
+      <button class="prof-btn" onclick="loadProfile('faisal')">🟢 بنك فيصل</button>
     </div>
     <button class="btn-save" onclick="saveCurrentProfile()">💾 حفظ الإعدادات الحالية</button>
   </div>
@@ -333,11 +334,11 @@ let dragging = null, dragOffX = 0, dragOffY = 0;
 
 // Saved profiles (preset coords)
 const PRESETS = {
-  nbe:  {cw:203,ch:93, payee:{x:38,y:63},words:{x:36,y:50},digits:{x:158,y:52},date:{x:152,y:64},memo:{x:10,y:14}},
-  bm:   {cw:203,ch:93, payee:{x:40,y:61},words:{x:38,y:48},digits:{x:156,y:50},date:{x:10,y:64},memo:{x:10,y:14}},
-  cib:  {cw:203,ch:93, payee:{x:38,y:64},words:{x:36,y:51},digits:{x:160,y:53},date:{x:155,y:65},memo:{x:12,y:14}},
-  qnb:  {cw:203,ch:93, payee:{x:40,y:62},words:{x:38,y:49},digits:{x:157,y:51},date:{x:150,y:63},memo:{x:10,y:14}},
-  alex: {cw:203,ch:93, payee:{x:36,y:65},words:{x:34,y:52},digits:{x:156,y:54},date:{x:10,y:66},memo:{x:10,y:14}},
+  nbe:  {cw:203,ch:93, img:'imgs/nbe.jpg', payee:{x:38,y:63},words:{x:36,y:50},digits:{x:158,y:52},date:{x:152,y:64},memo:{x:10,y:14}},
+  bm:   {cw:203,ch:93, img:'imgs/bm.jpg', payee:{x:40,y:61},words:{x:38,y:48},digits:{x:156,y:50},date:{x:10,y:64},memo:{x:10,y:14}},
+  cib:  {cw:203,ch:93, img:'imgs/cib.jpg', payee:{x:38,y:64},words:{x:36,y:51},digits:{x:160,y:53},date:{x:155,y:65},memo:{x:12,y:14}},
+  // مثال لإضافة بنك جديد:
+  faisal: {cw:203,ch:93, img:'imgs/faisal.jpg', payee:{x:40,y:62},words:{x:38,y:50},digits:{x:155,y:52},date:{x:150,y:64},memo:{x:10,y:14}},
 };
 
 // ══════════════════════════════════════════════
@@ -518,7 +519,6 @@ function redraw(){
       ctx.strokeStyle = 'rgba(0,0,0,0.4)';
       ctx.lineWidth = 1;
       const bh = mmToPx(7, 'y');
-      ctx.strokeRect(px-3, py-fsPx-2, pw+6, bh+4);
       ctx.font = `bold ${Math.max(10,fsPx)}px ${fontFace}`;
       ctx.direction = 'ltr';
       ctx.textAlign = 'center';
@@ -528,7 +528,7 @@ function redraw(){
     ctx.restore();
 
     // Draw drag handle
-    drawHandle(key, px, py, f.color);
+    drawHandle(key, px, py, pw, fsPx);
   });
 
   // AC Payee stamp
@@ -554,12 +554,77 @@ function redraw(){
 
 // Handle dots on canvas
 const handles = {};
-function drawHandle(key, px, py, color){
-  handles[key] = { cx: px, cy: py };
+function drawHandle(key, px, py, pw, fsPx){
+  // تسجيل مساحة النص بالكامل كمربع يمكن سحبه
+  handles[key] = { x: px, y: py - fsPx, w: pw, h: fsPx + 10 };
 }
 
-function drawPlaceholderCheque(){
-  const w = canvas.width, h = canvas.height;
+// تعديل جزء السحب في setupDrag
+function setupDrag(){
+  const wrap = document.getElementById('canvasWrap');
+
+  function getCanvasXY(e){
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top)  * scaleY
+    };
+  }
+
+  function findField(x, y){
+    let best = null;
+    Object.entries(handles).forEach(([key, box]) => {
+      // التحقق إذا كان الماوس داخل مساحة النص
+      if(x >= box.x && x <= box.x + box.w && y >= box.y && y <= box.y + box.h){
+        best = key;
+      }
+    });
+    return best;
+  }
+
+  function onDown(e){
+    const {x, y} = getCanvasXY(e);
+    const key = findField(x, y);
+    if(!key) return;
+    dragging = key;
+    // حساب المسافة الدقيقة لتجنب قفز الحقل عند الضغط
+    dragOffX = x - mmToPx(FIELDS[key].xMM, 'x');
+    dragOffY = y - (canvas.height - mmToPx(FIELDS[key].yMM, 'y'));
+    canvas.style.cursor = 'grabbing';
+    e.preventDefault();
+  }
+
+  function onMove(e){
+    if(!dragging) return;
+    const {x, y} = getCanvasXY(e);
+    const nx = x - dragOffX;
+    const ny = y - dragOffY;
+    const f = FIELDS[dragging];
+    // تحديث الإحداثيات بسلاسة
+    f.xMM = Math.max(0, Math.min(cwMM - f.wMM, pxToMM(nx, 'x')));
+    f.yMM = Math.max(0, Math.min(chMM, pxToMM(canvas.height - ny, 'y')));
+    syncCoordsTable();
+    redraw();
+    e.preventDefault();
+  }
+  
+  function onUp(){
+    if(dragging) showToast(`📍 ${FIELDS[dragging].label} تم التحديث`);
+    dragging = null;
+    canvas.style.cursor = 'crosshair';
+  }
+
+  canvas.addEventListener('mousedown', onDown);
+  canvas.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+  canvas.addEventListener('touchstart', onDown, {passive:false});
+  canvas.addEventListener('touchmove',  onMove, {passive:false});
+  document.addEventListener('touchend', onUp);
+}
   // cheque bg
   ctx.fillStyle = '#fefefe';
   ctx.fillRect(0,0,w,h);
@@ -668,33 +733,45 @@ function setupDrag(){
 function loadProfile(name){
   const p = PRESETS[name];
   if(!p) return;
+  
   document.getElementById('cwMM').value = p.cw;
   document.getElementById('chMM').value = p.ch;
   cwMM = p.cw; chMM = p.ch;
+  
   Object.keys(p).forEach(k => {
-    if(k==='cw'||k==='ch') return;
+    if(k==='cw'||k==='ch'||k==='img') return; // تجاهل حقل الصورة هنا
     if(FIELDS[k]){
       FIELDS[k].xMM = p[k].x;
       FIELDS[k].yMM = p[k].y;
     }
   });
+
+  // --- كود تحميل الصورة التلقائي ---
+  if(p.img) {
+    const imageObj = new Image();
+    imageObj.onload = () => {
+      bgImg = imageObj;
+      const ratio = imageObj.naturalWidth / imageObj.naturalHeight;
+      canvasW = 800;
+      canvasH = Math.round(800 / ratio);
+      canvas.width = canvasW;
+      canvas.height = canvasH;
+      document.getElementById('noImgMsg').style.display = 'none';
+      redraw();
+    };
+    imageObj.src = p.img; // استدعاء الصورة من المجلد
+  } else {
+    bgImg = null; // في حالة عدم وجود صورة
+  }
+  // --------------------------------
+
   document.querySelectorAll('.prof-btn').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
+  if(event && event.target) {
+     event.target.classList.add('active');
+  }
   syncCoordsTable();
   redraw();
   showToast(`✅ تم تحميل إعدادات ${name.toUpperCase()}`);
-}
-
-function saveCurrentProfile(){
-  const data = {};
-  Object.keys(FIELDS).forEach(k => {
-    data[k] = {x: FIELDS[k].xMM, y: FIELDS[k].yMM};
-  });
-  data.cw = cwMM; data.ch = chMM;
-  try{
-    localStorage.setItem('cheque_profile_custom', JSON.stringify(data));
-    showToast('💾 تم حفظ الإعدادات في المتصفح');
-  } catch(e){ showToast('⚠️ تعذّر الحفظ'); }
 }
 
 // ══════════════════════════════════════════════
@@ -764,7 +841,7 @@ function doPrint(){
     const wPct  = (f.wMM / cwMM * 100).toFixed(2);
     const bold  = (key==='digits'||key==='payee') ? 'font-weight:700;' : '';
     const align = key==='digits' ? 'text-align:center;direction:ltr;' : 'direction:rtl;';
-    const border= key==='digits' ? 'border:1.2px solid #555;padding:0 2mm;' : '';
+    const border= '';
     const color = key==='words'  ? 'color:#0d5e31;' : 'color:#000;';
     return `<div style="position:absolute;left:${lPct}%;bottom:${bPct}%;width:${wPct}%;font-size:${fontSize}pt;font-family:${fontFace};${bold}${align}${border}${color}${extra}">${text}</div>`;
   };
